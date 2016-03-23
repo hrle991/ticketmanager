@@ -45,6 +45,23 @@ class Inchoo_TicketManager_CommentController extends Mage_Core_Controller_Front_
 
                 $author_id = $this->_getSession()->getCustomer()->getId();
 
+                $ticket = Mage::getModel('inchoo_ticketmanager/ticket')->load($post['ticket_id']);
+
+                if(!$ticket->getId()) {
+                    $this->_getSession()->addError($this->__('This ticket no longer exists.'));
+                    $this->_redirect('*/*/');
+                    $this->setFlag('', self::FLAG_NO_DISPATCH, true);
+                    return false;
+                }
+
+                if($ticket->getCustomer_id() != $author_id)
+                {
+                    $this->_getSession()->addError($this->__('You\'re not authorize to comment this ticket.'));
+                    $this->_redirect('*/*/');
+                    $this->setFlag('', self::FLAG_NO_DISPATCH, true);
+                    return false;
+                }
+
                 $comment = Mage::getModel('inchoo_ticketmanager/comment');
                 $comment->setTicket_id($post['ticket_id']);
                 $comment->setAuthor_id($author_id);

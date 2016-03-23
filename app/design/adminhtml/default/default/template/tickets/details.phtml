@@ -26,16 +26,12 @@
                 <td class="value"><strong><?php echo $ticket->getWebsite_name() ?></strong></td>
             </tr>
             <tr>
-                <td class="label"><label>Customer</label></td>
-                <td class="value"><strong>Proba probić</strong></td>
-            </tr>
-            <tr>
                 <td class="label"><label>Subject</label></td>
-                <td class="value"><strong><?php echo $ticket->getSubject(); ?></strong></td>
+                <td class="value"><strong><?php echo $this->escapeHtml($ticket->getSubject()); ?></strong></td>
             </tr>
             <tr>
                 <td class="label"><label>Message</label></td>
-                <td class="value"><strong><?php echo $ticket->getMessage(); ?></strong></td>
+                <td class="value"><strong><?php echo $this->escapeHtml($ticket->getMessage()); ?></strong></td>
             </tr>
             <tr>
                 <td class="value">
@@ -60,7 +56,7 @@
         <p class="meta"><small><strong>
         <?php echo ($comment->getCustomer_firstname() && $comment->getCustomer_lastname()
         ? $comment->getCustomer_firstname().' '.$comment->getCustomer_lastname() : 'Admin').'</strong>, '.$helper->formatDate($comment->getCreated_at()) ?></small></p>
-        <p class="message"><?php echo $comment->getMessage(); ?></p>
+        <p class="message"><?php echo $this->escapeHtml($comment->getMessage()); ?></p>
     </div>
 <?php endforeach; ?>
 

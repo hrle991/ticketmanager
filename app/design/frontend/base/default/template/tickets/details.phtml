@@ -2,6 +2,8 @@
 <?php $comments = $this->getTicketComments(); ?>
 <?php $helper = Mage::helper('inchoo_ticketmanager'); ?>
 
+<div id="messages_product_view"><?php echo $this->getMessagesBlock()->toHtml() ?></div>
+
 <div class="page-title title-buttons">
     <h1><?php echo $this->__('Ticket #'.$ticket->getId()).($ticket->getStatus() == 0 ? ' - CLOSED' : ''); ?></h1>
     <form action="<?php echo $this->getCloseTicketUrl() ?>" method="post">
@@ -29,7 +31,7 @@
             <p class="meta"><small><strong>
                     <?php echo ($comment->getCustomer_firstname() && $comment->getCustomer_lastname()
                             ? $comment->getCustomer_firstname().' '.$comment->getCustomer_lastname() : 'Admin').'</strong>, '.$helper->formatDate($comment->getCreated_at()) ?></small></p>
-            <p class="message"><?php echo $comment->getMessage(); ?></p>
+            <p class="message"><?php echo $this->escapeHtml($comment->getMessage()); ?></p>
         </div>
     <?php endforeach; ?>
 

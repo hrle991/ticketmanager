@@ -1,5 +1,8 @@
 <?php $_tickets = $this->getTickets(); ?>
 <?php $helper = Mage::helper('inchoo_ticketmanager'); ?>
+
+<div id="messages_product_view"><?php echo $this->getMessagesBlock()->toHtml() ?></div>
+
 <div class="page-title title-buttons">
     <h1><?php echo $this->__('My tickets') ?></h1>
     <button type="button" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Create New Ticket')) ?>" class="button" onclick="window.location='<?php echo $this->getAddTicketUrl() ?>';"><span><span><?php echo $this->__('Create New Ticket') ?></span></span></button>

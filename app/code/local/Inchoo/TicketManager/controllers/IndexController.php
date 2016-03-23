@@ -19,7 +19,7 @@ class Inchoo_TicketManager_IndexController extends Mage_Core_Controller_Front_Ac
     public function indexAction()
     {
         $this->loadLayout();
-        $this->_initLayoutMessages('catalog/session');
+        $this->_initLayoutMessages('customer/session');
         $navigationBlock = $this->getLayout()->getBlock('customer_account_navigation');
         if ($navigationBlock) {
             $navigationBlock->setActive('ticket');
@@ -47,10 +47,34 @@ class Inchoo_TicketManager_IndexController extends Mage_Core_Controller_Front_Ac
     public function viewAction()
     {
         $this->loadLayout();
+        $this->_initLayoutMessages('customer/session');
         $navigationBlock = $this->getLayout()->getBlock('customer_account_navigation');
+
+        $ticket = Mage::getModel('inchoo_ticketmanager/ticket')->load($this->getRequest()->getParam('ticket_id'));
+
+        Mage::register('current_ticket', $ticket); // TO DO (block)
+
+        $author_id = $this->_getSession()->getCustomer()->getId();
+
+        if(!$ticket->getId()) {
+            $this->_getSession()->addError($this->__('This ticket no longer exists.'));
+            $this->_redirect('*/*/');
+            $this->setFlag('', self::FLAG_NO_DISPATCH, true);
+            return false;
+        }
+
+        if($ticket->getCustomer_id() != $author_id)
+        {
+            $this->_getSession()->addError($this->__('You\'re not authorize to comment this ticket.'));
+            $this->_redirect('*/*/');
+            $this->setFlag('', self::FLAG_NO_DISPATCH, true);
+            return false;
+        }
+
         if ($navigationBlock) {
             $navigationBlock->setActive('ticket');
         }
+
         $this->getLayout()->getBlock('head')->setTitle($this->__('Ticket details'));
         $this->renderLayout();
     }
@@ -89,7 +113,6 @@ class Inchoo_TicketManager_IndexController extends Mage_Core_Controller_Front_Ac
                 }
 
                 $website_id = Mage::app()->getWebsite()->getId();
-
                 $ticket = Mage::getModel('inchoo_ticketmanager/ticket');
                 $ticket->setCustomer_id($session->getCustomer()->getId());
                 $ticket->setWebsite_id($website_id);
@@ -100,15 +123,15 @@ class Inchoo_TicketManager_IndexController extends Mage_Core_Controller_Front_Ac
 
 
                 $session->addSuccess(Mage::helper('contacts')->__('Your ticket was submitted. We will get in touch with you as soon as possible.'));
-                $this->_redirect('*/*/');
+                $this->_redirect('*/*/view/ticket_id/'.$ticket->getId());
 
             } catch(Exception $e) {
                 $session->addError(Mage::helper('inchoo_ticketmanager')->__('Unable to submit your request. Please, try again later'));
                 return $this->_redirect('/');
             }
+        } else {
+            return $this->_redirect('*/*/new');
         }
-
-        return $this->_redirect('*/*/new');
     }
 
     // change ticket status
@@ -143,6 +166,15 @@ class Inchoo_TicketManager_IndexController extends Mage_Core_Controller_Front_Ac
             }
 
             $ticket = Mage::getModel('inchoo_ticketmanager/ticket')->load($post['ticket_id']);
+
+            if($ticket->getCustomer_id() != $session->getCustomer()->getId())
+            {
+                $this->_getSession()->addError($this->__('You\'re not authorize to change this ticket status.'));
+                $this->_redirect('*/*/');
+                $this->setFlag('', self::FLAG_NO_DISPATCH, true);
+                return false;
+            }
+
             $ticket->setStatus($ticket->getStatus()^1);
             $ticket->save();
 
