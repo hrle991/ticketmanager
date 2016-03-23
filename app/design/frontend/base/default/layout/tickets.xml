@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<layout version="0.1.0">
+    <customer_account>
+        <reference name="customer_account_navigation">
+            <action method="addLink" translate="label" module="review"><name>reviews</name><path>ticket</path><label>My tickets</label></action>
+        </reference>
+    </customer_account>
+
+    <inchoo_ticketmanager>
+        <reference name="root">
+            <action method="setTemplate"><template>page/2columns-left.phtml</template></action>
+        </reference>
+    </inchoo_ticketmanager>
+
+    <inchoo_ticketmanager_index_index>
+        <update handle="customer_account"/>
+        <reference name="my.account.wrapper">
+            <block type="inchoo_ticketmanager/ticket" name="tickets.list">
+                <block type="core/text_list" name="tickets.list.info" as="info" translate="label">
+                    <label>My Tickets List Info</label>
+                </block>
+            </block>
+        </reference>
+    </inchoo_ticketmanager_index_index>
+
+    <inchoo_ticketmanager_index_form>
+        <update handle="customer_account"/>
+        <reference name="my.account.wrapper">
+            <block type="inchoo_ticketmanager/ticket_edit" name="inchoo.ticketmanager.ticket.edit" template="tickets/edit.phtml"/>
+        </reference>
+    </inchoo_ticketmanager_index_form>
+
+    <inchoo_ticketmanager_index_view>
+        <update handle="customer_account"/>
+        <reference name="my.account.wrapper">
+            <block type="inchoo_ticketmanager/details" name="inchoo.ticketmanager.ticket.details" template="tickets/details.phtml"/>
+        </reference>
+    </inchoo_ticketmanager_index_view>
+
+</layout>

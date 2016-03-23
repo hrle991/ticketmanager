@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+    <menu>
+        <report>
+            <children>
+                <inchoo_ticketmanager translate="title" module="inchoo_ticketmanager">
+                    <title>Tickets</title>
+                    <action>adminhtml/inchoo_ticket/index</action>
+                    <sort_order>99999</sort_order>
+                </inchoo_ticketmanager>
+            </children>
+        </report>
+    </menu>
+</config>

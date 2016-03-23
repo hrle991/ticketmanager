@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+ <layout>
+    <adminhtml_inchoo_ticket_details>
+        <reference name="content">
+            <block type="inchoo_ticketmanager/details" name="admin.ticket.details" template="tickets/details.phtml"/>
+        </reference>
+    </adminhtml_inchoo_ticket_details>
+</layout>

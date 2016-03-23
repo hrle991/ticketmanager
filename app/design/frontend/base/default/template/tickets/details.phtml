@@ -1,0 +1,62 @@
+<?php $ticket = $this->getTicketDetails(); ?>
+<?php $comments = $this->getTicketComments(); ?>
+<?php $helper = Mage::helper('inchoo_ticketmanager'); ?>
+
+<div class="page-title title-buttons">
+    <h1><?php echo $this->__('Ticket #'.$ticket->getId()).($ticket->getStatus() == 0 ? ' - CLOSED' : ''); ?></h1>
+    <form action="<?php echo $this->getCloseTicketUrl() ?>" method="post">
+        <?php echo $this->getBlockHtml('formkey'); ?>
+        <input type="hidden" name="ticket_id" value="<?php echo $ticket->getId() ?>"/>
+        <button type="submit" title="<?php echo Mage::helper('core')->quoteEscape($this->__(($ticket->getStatus() == 0 ? 'Open ticket' : 'Close ticket'))) ?>" class="button" onclick="window.location='<?php echo $this->getAddTicketUrl() ?>';"><span><span><?php echo $this->__(($ticket->getStatus() == 0 ? 'Open ticket' : 'Close ticket')) ?></span></span></button>
+    </form>
+</div>
+
+<ol>
+    <li class="item">
+        <h3>Subject:</h3>
+        <p><?php echo $this->escapeHtml($ticket->getSubject()) ?></p>
+    </li>
+    <li class="item">
+        <h3>Message:</h3>
+        <p><?php echo $this->escapeHtml($ticket->getMessage()) ?></p>
+    </li>
+</ol>
+
+<h2 class="legend" style="margin-top: 10px;">Comments (<?php echo $this->countComments(); ?>)</h2>
+
+    <?php foreach($comments as $comment): ?>
+        <div class="comment" style="border:1px solid #C0C0C0; padding: 10px; margin-bottom:10px;">
+            <p class="meta"><small><strong>
+                    <?php echo ($comment->getCustomer_firstname() && $comment->getCustomer_lastname()
+                            ? $comment->getCustomer_firstname().' '.$comment->getCustomer_lastname() : 'Admin').'</strong>, '.$helper->formatDate($comment->getCreated_at()) ?></small></p>
+            <p class="message"><?php echo $comment->getMessage(); ?></p>
+        </div>
+    <?php endforeach; ?>
+
+<form action="<?php echo $this->getSaveCommentUrl(); ?>" id="commentForm" method="post">
+    <div class="fieldset">
+        <?php echo $this->getBlockHtml('formkey'); ?>
+        <h2 class="legend"><?php echo $helper->__('Reply') ?></h2>
+        <input type="hidden" name="ticket_id" value="<?php echo $ticket->getId() ?>">
+        <ul class="form-list">
+            <li class="wide">
+                <label for="message" class="required"><em>*</em><?php echo $helper->__('Message') ?></label>
+                <div class="input-box">
+                    <textarea name="message" id="message" title="<?php echo Mage::helper('core')->quoteEscape(Mage::helper('inchoo_ticketmanager')->__('Message')) ?>" class="required-entry input-text" cols="5" rows="5"></textarea>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="buttons-set">
+        <p class="required"><?php echo Mage::helper('contacts')->__('* Required Fields') ?></p>
+        <button type="submit" <?php echo ($ticket->getStatus() == 0 ? 'disabled="disabled"'  : ''); ?> title="<?php echo Mage::helper('core')->quoteEscape(Mage::helper('contacts')->__('Submit')) ?>" class="button"><span><span><?php echo Mage::helper('contacts')->__('Submit') ?></span></span></button>
+    </div>
+</form>
+
+<script type="text/javascript">
+    //<![CDATA[
+    var commentForm = new VarienForm('commentForm', true);
+    //]]>
+</script>
+
+

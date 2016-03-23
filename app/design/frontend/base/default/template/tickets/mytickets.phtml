@@ -1,0 +1,39 @@
+<?php $_tickets = $this->getTickets(); ?>
+<?php $helper = Mage::helper('inchoo_ticketmanager'); ?>
+<div class="page-title title-buttons">
+    <h1><?php echo $this->__('My tickets') ?></h1>
+    <button type="button" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Create New Ticket')) ?>" class="button" onclick="window.location='<?php echo $this->getAddTicketUrl() ?>';"><span><span><?php echo $this->__('Create New Ticket') ?></span></span></button>
+</div>
+
+<table class="data-table orders" id="my-orders-table">
+    <col width="1" />
+    <col width="1" />
+    <col width="1"/>
+    <col width="1" />
+    <col width="1" />
+    <col width="1" />
+    <thead>
+    <tr>
+        <th class="number"><?php echo $this->__('Ticket #') ?></th>
+        <th class="date"><?php echo $this->__('Date') ?></th>
+        <th class="subject"><?php echo $this->__('Subject') ?></th>
+        <th class="message"><?php echo $this->__('Message') ?></th>
+        <th class="message"><?php echo $this->__('Status') ?></th>
+        <th class="view">&nbsp;</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach($_tickets as $_ticket): ?>
+        <tr>
+            <td class="number"><?php echo $_ticket->getTicket_id() ?></td>
+            <td class="date"><?php echo $helper->formatDate($_ticket->getCreated_at()) ?></td>
+            <td class="subject"> <?php echo $this->escapeHtml($_ticket->getSubject()) ?></td>
+            <td class="message"> <?php echo $this->escapeHtml($_ticket->getMessage()) ?></td>
+            <td class="status"><em><?php echo ($_ticket->getStatus() == 1 ? 'Open' : 'Closed'); ?></em></td>
+            <td class="a-center view">
+                <span class="nobr"><a href="<?php echo $this->getViewUrl($_ticket); ?>"><?php echo $this->__('View Ticket') ?></a></span>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>

@@ -1,0 +1,87 @@
+<?php $ticket = $this->getTicketDetails(); ?>
+<?php $comments = $this->getTicketComments(); ?>
+<?php $helper = Mage::helper('inchoo_ticketmanager'); ?>
+
+<div class="content-header">
+    <h3 class="icon-head head-products">Ticket #<?php echo $ticket->getId() ?></h3>
+</div>
+
+<div class="entry-edit">
+    <div class="entry-edit-head">
+        <strong>Ticket details</strong>
+    </div>
+    <div class="fieldset">
+        <table class="form-list" cellspacing="0">
+            <tbody>
+            <tr>
+                <td class="label"><label>Created at</label></td>
+                <td class="value"><strong><?php echo $helper->formatDate($ticket->getCreated_at()) ?></strong></td>
+            </tr>
+            <tr>
+                <td class="label"><label>Ticket Status</label></td>
+                <td class="value"><strong><span id="ticket_status"><?php echo ($ticket->getStatus() == 0 ? 'Closed' : 'Open') ?></span></strong></td>
+            </tr>
+            <tr>
+                <td class="label"><label>Website</label></td>
+                <td class="value"><strong><?php echo $ticket->getWebsite_name() ?></strong></td>
+            </tr>
+            <tr>
+                <td class="label"><label>Customer</label></td>
+                <td class="value"><strong>Proba probić</strong></td>
+            </tr>
+            <tr>
+                <td class="label"><label>Subject</label></td>
+                <td class="value"><strong><?php echo $ticket->getSubject(); ?></strong></td>
+            </tr>
+            <tr>
+                <td class="label"><label>Message</label></td>
+                <td class="value"><strong><?php echo $ticket->getMessage(); ?></strong></td>
+            </tr>
+            <tr>
+                <td class="value">
+                    <form action="<?php echo Mage::helper("adminhtml")->getUrl('adminhtml/inchoo_ticket/closeTicket'); ?>" id="closeTicketForm" method="post">
+                        <?php echo $this->getBlockHtml('formkey'); ?>
+                        <input type="hidden" name="ticket_id" value="<?php echo $ticket->getId() ?>"/>
+                        <button type="submit" title="<?php echo Mage::helper('core')->quoteEscape($this->__(($ticket->getStatus() == 0 ? 'Open ticket' : 'Close ticket'))) ?>" class="button" onclick="window.location='<?php echo $this->getAddTicketUrl() ?>';"><span><span><?php echo $this->__(($ticket->getStatus() == 0 ? 'Open ticket' : 'Close ticket')) ?></span></span></button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="content-header">
+    <h3 class="icon-head head-products">Comments (<?php echo $this->countComments(); ?>)</h3>
+</div>
+
+<?php foreach($comments as $comment): ?>
+    <div class="fieldset" style="background: #fafafa; border:1px solid #C0C0C0; padding: 10px; margin-bottom:10px;">
+        <p class="meta"><small><strong>
+        <?php echo ($comment->getCustomer_firstname() && $comment->getCustomer_lastname()
+        ? $comment->getCustomer_firstname().' '.$comment->getCustomer_lastname() : 'Admin').'</strong>, '.$helper->formatDate($comment->getCreated_at()) ?></small></p>
+        <p class="message"><?php echo $comment->getMessage(); ?></p>
+    </div>
+<?php endforeach; ?>
+
+<form action="<?php echo Mage::helper("adminhtml")->getUrl('adminhtml/inchoo_ticket/commentPost'); ?>" id="commentForm" method="post">
+    <div class="fieldset">
+        <?php echo $this->getBlockHtml('formkey'); ?>
+        <h2 class="legend"><?php echo $helper->__('Reply') ?></h2>
+        <input type="hidden" name="ticket_id" value="<?php echo $ticket->getId() ?>">
+        <div class="input-box">
+            <textarea <?php echo ($ticket->getStatus() == 0 ? 'disabled="disabled"'  : ''); ?> name="message" id="message" title="<?php echo Mage::helper('core')->quoteEscape(Mage::helper('inchoo_ticketmanager')->__('Message')) ?>" class="required-entry input-text" cols="100" rows="10"></textarea>
+        </div>
+    </div>
+
+    <button type="submit" <?php echo ($ticket->getStatus() == 0 ? 'disabled="disabled"'  : ''); ?> title="<?php echo Mage::helper('core')->quoteEscape(Mage::helper('contacts')->__('Submit')) ?>" class="button"><span><span><?php echo Mage::helper('contacts')->__('Submit') ?></span></span></button>
+</form>
+
+<script type="text/javascript">
+    //<![CDATA[
+    var commentForm = new varienForm('commentForm', true);
+    //]]>
+</script>
+
+
+

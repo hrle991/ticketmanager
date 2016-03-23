@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+    <modules>
+        <Inchoo_TicketManager>
+            <active>1</active>
+            <codePool>local</codePool>
+        </Inchoo_TicketManager>
+    </modules>
+</config>
