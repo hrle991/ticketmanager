@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<config>
+    <modules>
+        <Inchoo_TicketNotification>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Inchoo_TicketNotification>
+    </modules>
+</config>

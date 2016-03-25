@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<config>
+    <modules>
+        <Inchoo_TicketNotification>
+            <version>1.0.0.0</version>
+        </Inchoo_TicketNotification>
+    </modules>
+
+    <default>
+        <new_ticket_mail>
+            <email>
+                <template>tickets_inchoo_ticketnotification_ticket_email_template</template>
+            </email>
+        </new_ticket_mail>
+    </default>
+
+    <global>
+        <helpers>
+            <inchoo_ticketnotification>
+                <class>Inchoo_TicketNotification_Helper</class>
+            </inchoo_ticketnotification>
+        </helpers>
+        <models>
+            <inchoo_ticketnotification>
+                <class>Inchoo_TicketNotification_Model</class>
+            </inchoo_ticketnotification>
+        </models>
+        <template>
+            <email>
+                <tickets_inchoo_ticketnotification_ticket_email_template module="inchoo_ticketnotification">
+                    <label>Ticket notification email</label>
+                    <file>ticket_new_notification.html</file>
+                    <type>html</type>
+                </tickets_inchoo_ticketnotification_ticket_email_template>
+            </email>
+        </template>
+    </global>
+
+    <frontend>
+        <events>
+            <inchoo_ticketmanager_ticket_save_after>
+                <observers>
+                    <inchoo_ticketnotification_observer>
+                        <class>inchoo_ticketnotification/observer</class>
+                        <method>newTicket</method>
+                    </inchoo_ticketnotification_observer>
+                </observers>
+            </inchoo_ticketmanager_ticket_save_after>
+        </events>
+    </frontend>
+
+    <adminhtml>
+        <acl>
+            <resources>
+                <all>
+                    <title>Allow Everything</title>
+                </all>
+                <admin>
+                    <children>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <tickets>
+                                            <title>Inchoo - All</title>
+                                        </tickets>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+    </adminhtml>
+</config>
